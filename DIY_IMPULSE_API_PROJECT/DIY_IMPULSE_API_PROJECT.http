@@ -1,0 +1,6 @@
+@DIY_IMPULSE_API_PROJECT_HostAddress = http://localhost:5077
+
+GET {{DIY_IMPULSE_API_PROJECT_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
