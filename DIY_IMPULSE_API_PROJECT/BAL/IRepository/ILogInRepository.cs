@@ -6,6 +6,8 @@ namespace DIY_IMPULSE_API_PROJECT.BAL.IRepository
     {
         public  Task<bool> RegisterUser(RegisterUserModel user);
 
+        public Task<LoginResponse> RefreshToken(RefreshTokenModel model);
+
         public Task<LoginResponse> Login(LogInUser user);
     }
 }

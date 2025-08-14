@@ -2,6 +2,7 @@
 using DIY_IMPULSE_API_PROJECT.DAL;
 using DIY_IMPULSE_API_PROJECT.DBENGINE;
 using DIY_IMPULSE_API_PROJECT.MODEL;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -21,6 +22,8 @@ namespace DIY_IMPULSE_API_PROJECT.BAL.Repository
             _config = config;
             _DbEngine = DbEngine;
         }
+
+        
 
         public async Task<bool> RegisterUser(RegisterUserModel user)
         {

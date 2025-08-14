@@ -60,7 +60,30 @@ builder.Services.AddScoped<DIY_IMPULSE_API_PROJECT.BAL.IRepository.IRSAHelperRep
 builder.Services.AddScoped<DIY_IMPULSE_API_PROJECT.BAL.IRepository.ICommonRepo,DIY_IMPULSE_API_PROJECT.BAL.Repository.CommonRepo>();
 builder.Services.AddScoped<DIY_IMPULSE_API_PROJECT.BAL.IRepository.IAuthServices,DIY_IMPULSE_API_PROJECT.BAL.Repository.AuthServices>();
 builder.Services.AddScoped<DIY_IMPULSE_API_PROJECT.BAL.IRepository.ILogInRepository,DIY_IMPULSE_API_PROJECT.BAL.Repository.LogInRepository>();
+builder.Services.AddScoped<DIY_IMPULSE_API_PROJECT.BAL.IRepository.IPortpholio,DIY_IMPULSE_API_PROJECT.BAL.Repository.PortpholioRepo>();
 
+// Add services to the container.
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin",
+        policy =>
+        {
+            policy.WithOrigins("http://example.com",
+                               "http://www.example.com",
+                               "http://localhost:55239") // Angular dev server
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+
+    // For development only - wide open policy
+    options.AddPolicy("AllowAll",
+        policy =>
+        {
+            policy.AllowAnyOrigin()
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
 
 
 var app = builder.Build();
@@ -70,6 +93,11 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseCors("AllowAll"); // Use wide-open policy in development
+}
+else
+{
+    app.UseCors("AllowSpecificOrigin"); // Use restricted policy in production
 }
 
 app.UseHttpsRedirection();
