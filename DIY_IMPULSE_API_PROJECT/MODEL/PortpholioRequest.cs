@@ -3,6 +3,7 @@
     public class PortpholioRequest
     {
         public string? Name { get; set; }
+        public string? Subject { get; set; }
         public string? EmailId { get; set; }
         public string? Message { get; set; }
 
