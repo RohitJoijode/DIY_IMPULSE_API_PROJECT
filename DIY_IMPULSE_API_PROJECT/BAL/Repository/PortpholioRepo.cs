@@ -5,6 +5,8 @@ using DIY_IMPULSE_API_PROJECT.MODEL;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using System.Data;
 using System.Reflection.PortableExecutable;
 
@@ -13,12 +15,15 @@ namespace DIY_IMPULSE_API_PROJECT.BAL.Repository
     public class PortpholioRepo : IPortpholio
     {
         private readonly IConfiguration _IConfiguration;
-        public PortpholioRepo(IConfiguration iConfiguration)
+        private readonly ICommonRepo _ICommonRepo;
+        public PortpholioRepo(IConfiguration iConfiguration,ICommonRepo ICommonRepo)
         {
             _IConfiguration = iConfiguration;
+            _ICommonRepo = ICommonRepo;
+            
         }
 
-        public async Task<Responses> SaveDataFromPortfolio(PortpholioRequest portfolioRequestObj)
+        public async Task<Responses> SaveDataFromPortfolio(PortpholioRequest portfolioRequestObj,string baseUrl,string Ip)
         {
             var response = new Responses();
 
@@ -88,6 +93,12 @@ namespace DIY_IMPULSE_API_PROJECT.BAL.Repository
                 response.Message = $"An unexpected error occurred: {ex.Message}";
                 // Log the exception here
 
+            }
+            finally
+            {
+                var requestObj = JsonConvert.SerializeObject(portfolioRequestObj);
+                var responseObj = JsonConvert.SerializeObject(response);
+                await _ICommonRepo.SaveRequestHistory(portfolioRequestObj.EmailId, requestObj,responseObj,baseUrl,Ip);
             }
 
             return response;

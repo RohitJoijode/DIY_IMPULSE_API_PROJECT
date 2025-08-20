@@ -64,6 +64,40 @@ namespace DIY_IMPULSE_API_PROJECT.BAL.Repository
         }
 
 
+        public async Task<DataTable> SaveRequestHistory(string? UserId,object Request,object Response,string baseUrls,string IP)
+        {
+            var dataTable = new DataTable();
+            try
+            {
+                var connectionString = _IConfiguration.GetConnectionString("ConnectionString");
+                
+
+                using (var connection = new SqlConnection(connectionString))
+                {
+                    var command = new SqlCommand("usp_SaveRequestHistory", connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@UserId", UserId);
+                    command.Parameters.AddWithValue("@BaseUrl", baseUrls);
+                    command.Parameters.AddWithValue("@Request", Request);
+                    command.Parameters.AddWithValue("@Response", Response);
+                    command.Parameters.AddWithValue("@IP", IP);
+
+                    await connection.OpenAsync();
+
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        dataTable.Load(reader);
+                    }
+                }
+            } catch(Exception ex)
+            {
+
+            }
+            
+
+            return dataTable;
+        }
+
 
     }
 }

@@ -9,5 +9,7 @@ namespace DIY_IMPULSE_API_PROJECT.BAL.IRepository
 
         public Task<DataTable> GetDashboardData(string UserId);
 
+        public Task<DataTable> SaveRequestHistory(string UserId, object Request, object Response, string baseUrls, string IP);
+
     }
 }

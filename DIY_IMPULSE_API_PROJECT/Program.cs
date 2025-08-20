@@ -61,6 +61,9 @@ builder.Services.AddScoped<DIY_IMPULSE_API_PROJECT.BAL.IRepository.ICommonRepo,D
 builder.Services.AddScoped<DIY_IMPULSE_API_PROJECT.BAL.IRepository.IAuthServices,DIY_IMPULSE_API_PROJECT.BAL.Repository.AuthServices>();
 builder.Services.AddScoped<DIY_IMPULSE_API_PROJECT.BAL.IRepository.ILogInRepository,DIY_IMPULSE_API_PROJECT.BAL.Repository.LogInRepository>();
 builder.Services.AddScoped<DIY_IMPULSE_API_PROJECT.BAL.IRepository.IPortpholio,DIY_IMPULSE_API_PROJECT.BAL.Repository.PortpholioRepo>();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<DIY_IMPULSE_API_PROJECT.BAL.IRepository.IBaseUrlServiceRepo,DIY_IMPULSE_API_PROJECT.BAL.Repository.BaseUrlServiceRepo>();
+builder.Services.AddScoped<DIY_IMPULSE_API_PROJECT.BAL.IRepository.IIpServiceRepo,DIY_IMPULSE_API_PROJECT.BAL.Repository.IpServiceRepo>();
 
 // Add services to the container.
 builder.Services.AddCors(options =>

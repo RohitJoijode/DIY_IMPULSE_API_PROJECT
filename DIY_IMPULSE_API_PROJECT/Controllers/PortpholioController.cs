@@ -13,18 +13,26 @@ namespace DIY_IMPULSE_API_PROJECT.Controllers
         private readonly ICommonRepo _commonRepo;
         private readonly ILogInRepository _logInRepository;
         private readonly IPortpholio _IPortpholioRepo;
-
-        public PortpholioController(ICommonRepo CommonRepo, IAuthServices AuthService, ILogInRepository ILogInRepository,IPortpholio IPortpholioRepo)
+        private readonly IBaseUrlServiceRepo _baseUrlService;
+        private readonly IIpServiceRepo _ipService;
+        public PortpholioController(ICommonRepo CommonRepo, IAuthServices AuthService, ILogInRepository ILogInRepository,IPortpholio IPortpholioRepo,IBaseUrlServiceRepo IBaseUrlServiceRepo, IIpServiceRepo IIpServiceRepo)
         {
             _commonRepo = CommonRepo;
             _authService = AuthService;
             _logInRepository = ILogInRepository;
             _IPortpholioRepo = IPortpholioRepo;
+            _baseUrlService = IBaseUrlServiceRepo;
+            _ipService = IIpServiceRepo;
         }
 
         [HttpPost,Route("SaveDataFromPortpholio")]
         public async Task<IActionResult> SaveDataFromPortpholio(PortpholioRequest PortpholioRequestObj)
         {
+            var requestUrl = _baseUrlService.GetBaseUrl();
+            var ipAddress = _ipService.GetClientIpAddress();
+
+            if (requestUrl == null)
+                return BadRequest("Unable to determine base URL");
 
             if (!Request.Headers.TryGetValue("Username", out var usernameHeader) ||
        !Request.Headers.TryGetValue("Password", out var passwordHeader))
@@ -39,7 +47,8 @@ namespace DIY_IMPULSE_API_PROJECT.Controllers
 
             if (ResponseObj.IsSuccess)
             {
-                ResponsesObj = await _IPortpholioRepo.SaveDataFromPortfolio(PortpholioRequestObj);
+
+                ResponsesObj = await _IPortpholioRepo.SaveDataFromPortfolio(PortpholioRequestObj, requestUrl,ipAddress);
                 return Ok(ResponsesObj);
             }
             else
